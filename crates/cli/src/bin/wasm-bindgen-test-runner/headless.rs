@@ -386,7 +386,7 @@ impl Client {
                     "capabilities": {
                     }
                 });
-                let x: Response = self.post("/session", &request)?;
+                let x: Response = self.post("session", &request)?;
                 Ok(x.clone()
                     .session_id
                     .or_else(|| x.value.map(|v| v.session_id.unwrap()))
@@ -418,7 +418,7 @@ impl Client {
                     desired: cap,
                     required: Capabilities::new(),
                 };
-                let x: Response = self.post("/session", &request)?;
+                let x: Response = self.post("session", &request)?;
                 Ok(x.session_id)
             }
         }
@@ -427,7 +427,7 @@ impl Client {
     fn close_window(&mut self, id: &str) -> Result<(), Error> {
         #[derive(Deserialize)]
         struct Response {}
-        let x: Response = self.delete(&format!("/session/{}/window", id))?;
+        let x: Response = self.delete(&format!("session/{}/window", id))?;
         drop(x);
         Ok(())
     }
@@ -443,7 +443,7 @@ impl Client {
         let request = Request {
             url: url.to_string(),
         };
-        let x: Response = self.post(&format!("/session/{}/url", id), &request)?;
+        let x: Response = self.post(&format!("session/{}/url", id), &request)?;
         drop(x);
         Ok(())
     }
@@ -470,7 +470,7 @@ impl Client {
             using: "css selector".to_string(),
             value: selector.to_string(),
         };
-        let x: Response = self.post(&format!("/session/{}/element", id), &request)?;
+        let x: Response = self.post(&format!("session/{}/element", id), &request)?;
         Ok(x.value
             .gecko_reference
             .or(x.value.safari_reference)
@@ -482,7 +482,7 @@ impl Client {
         struct Response {
             value: String,
         }
-        let x: Response = self.get(&format!("/session/{}/element/{}/text", id, element))?;
+        let x: Response = self.get(&format!("session/{}/element/{}/text", id, element))?;
         Ok(x.value)
     }
 
